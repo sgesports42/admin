@@ -1,0 +1,13 @@
+function doPost(e) {
+  var name = e.parameter.name;
+  var number = e.parameter.number;
+  var petname = e.parameter.petname;
+  var username = e.parameter.username;
+
+  var sheet = SpreadsheetApp.openById('17_snlLu-l2nid6xyu0r1z1hStLZpgP4-wpR7Dp4FkWI').getSheetByName('result');
+
+  sheet.appendRow([name, number, petname, username]);
+
+  return ContentService.createTextOutput(JSON.stringify({ result: "Success" }))
+                       .setMimeType(ContentService.MimeType.JSON);
+}

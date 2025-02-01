@@ -1,0 +1,113 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://kit.fontawesome.com/8aa17a250d.js" crossorigin="anonymous"></script>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Henny+Penny&display=swap');
+    *{ overflow-x: hidden; }
+    h1,h2,h3,h4,h5,h6 ,p { margin: 0; }
+    body { padding: 0; margin: 0; background: linear-gradient(360deg, #091b33, #00a9a9, #172459); color: #fff; font-family: 'Poppins' , sans-serif ; }
+    .header { display: flex; align-items: center; padding: 10px; background: #04365f; color: #fff; box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; justify-content: space-between; }
+    .header h2 { margin: 0px 0px 0px 10px; font-family: "Henny Penny", serif; color: e7e7e7; }
+    .header img { border-radius: 125px; width: 40px; height: 40px; }
+    #tournamentForm { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
+    h1 { font-weight: 300; text-align: center; font-size: 26px; overflow: hidden; }
+    input , button , select{ padding: 10px 8px 10px 15px; width: 90%; border-radius: 25px; border: 1px solid #939393; margin: 10px 0px 10px 0px; outline: none; font-weight: 400; font-family: "Poppins", serif; }
+    button { color: #fff; background: #000; border: none; overflow: hidden; }
+    textarea { width: 90%; resize: none; height: 100px; border-radius: 12px; outline: none; padding: 10px; }
+    input , select , textarea{ background: #c1c1c1; color: #000; }
+    label { font-size: 21px; overflow: hidden; }
+    input[type="file"]::file-selector-button { border: 2px solid #6c5ce7; padding: 0.2em 0.4em; border-radius: 0.2em; background-color: #a29bfe; transition: 1s; } 
+    input[type="file"]::file-selector-button:hover { background-color: #81ecec; border: 2px solid #00cec9; }
+    a , i , .header_links { overflow: hidden; font-size: 18px; color: #fff; padding: 3px; border: none; }
+    i { background-color: #ffff00; padding: 10px; color: #353535; border-radius: 125px; }
+</style>
+<div class="ds">
+    <div class="header">
+        <img src="https://i.ibb.co/CK4DJNmv/icon.jpg" class="image">
+        <div class="header_links">
+            <a href="add_coins.html"><i class="fa-solid fa-database"></i></a>
+            <a href="remove.html"><i class="fa-solid fa-trash" style="background: #ff0000;"></i></a>
+            <a href="room.html"><i class="fa-solid fa-pen-nib" style="background: #2196F3;"></i></a>
+            <a href="result.html"><i class="fa-solid fa-square-poll-vertical" style="background: #9a21f3;"></i></a>
+            <a href="up_remove.html"><i class="fa-solid fa-xmark" style="background: #f3219d;"></i></a>
+        </div>
+    </div>
+</div>
+
+<form id="tournamentForm">
+    <h1>Tournament Registration</h1>
+    <input type="text" id="name" name="name" required placeholder="Tournament Name:">
+    <label for="image">Upload Image:</label>
+    <input type="file" id="image" name="image" accept="image/*" required>
+    <input type="number" id="price" name="price" required placeholder="Entry Fee:">
+    <label for="mode">Mode:</label>
+    <select id="mode" name="mode" required>
+        <option value="LONE WOLF">Lone Wolf</option>
+        <option value="CS">Clash Squad</option>
+        <option value="SURVIVE">Survive</option>
+        <option value="PER KILL">Per Kill</option>
+    </select>
+    <textarea id="prize" placeholder="Prize Pool: "></textarea>
+    <input type="number" id="slot" name="slot" required placeholder="Slot:">
+    <input type="text" id="mouse" name="mouse" required placeholder="Time:"> <!-- Added input for mouse -->
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+document.getElementById('tournamentForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const price = document.getElementById('price').value;
+    const mode = document.getElementById('mode').value;
+    const prize = document.getElementById('prize').value;
+    const slot = document.getElementById('slot').value;
+    const mouse = document.getElementById('mouse').value; // Capture mouse input
+    const imageFile = document.getElementById('image').files[0];
+
+    const formData = new FormData();
+    formData.append('image', imageFile);
+
+    fetch('https://api.imgur.com/3/image', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Client-ID d96563492bd3854'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const imageUrl = data.data.link;
+
+            const tournamentData = {
+                name: name,
+                price: price,
+                mode: mode,
+                prize: prize,
+                slot: slot,
+                mouse: mouse, // Add mouse data
+                image: imageUrl
+            };
+
+            fetch('https://script.google.com/macros/s/AKfycbzZVzu9a-C-mRjAdO806J6jSam5r4ldORAk0QBrZGoMCe81oUdSTTfrTTxohs0JA94i/exec', {
+                method: 'POST',
+                body: JSON.stringify(tournamentData)
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                alert('Tournament data submitted successfully!');
+            })
+            .catch(error => {
+                alert('Error saving data to sheet');
+            });
+        } else {
+            alert('Error uploading image');
+        }
+    })
+    .catch(error => {
+        alert('Error uploading image');
+    });
+});
+</script>

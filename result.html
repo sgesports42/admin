@@ -1,0 +1,50 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Henny+Penny&display=swap');
+    *{ overflow-x: hidden; }
+    h1,h2,h3,h4,h5,h6 ,p { margin: 0; }
+    body { padding: 0; margin: 0; background: linear-gradient(360deg, #091b33, #00a9a9, #172459); color: #fff; font-family: 'Poppins' , sans-serif ; }
+    .header { display: flex; align-items: center; padding: 10px; background: #04365f; color: #fff; box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px; gap: 10px; }
+    .header h2 { margin: 0px 0px 0px 10px; font-family: "Henny Penny", serif; color: e7e7e7; }
+    .header img { border-radius: 125px; width: 40px; height: 40px; }
+    .tournament { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
+    h1 { font-weight: 300; text-align: center; font-size: 26px; overflow: hidden; }
+    input , button , select{ padding: 10px 8px 10px 15px; width: 90%; border-radius: 25px; border: 1px solid #939393; margin: 10px 0px 10px 0px; outline: none; font-weight: 400; font-family: "Poppins", serif; }
+    button { color: #fff; background: #000; border: none; overflow: hidden; }
+    input , select{ background: #c1c1c1; color: #000; }
+    form { display: flex; flex-direction: column; width: 100%; justify-content: center; align-items: center; }
+    .btn { background: #000; color: #fff; padding: 10px 8px 10px 10px; }
+</style>
+<div class="header">
+    <img src="https://i.ibb.co/CK4DJNmv/icon.jpg" class="image">
+    <h2>SG Esports</h2>
+</div>
+<div class="tournament">
+<h1>Tournament Result</h1>
+<form action="https://script.google.com/macros/s/AKfycbxfpCowTBnF_7uqRsyaS9Td7jP8BwQKgS-yiQ0rBRD6P0ihOcFbdiXfDWlaRECD1aO_/exec" method="POST">
+  <input type="text" id="name" name="name" placeholder="Name: " required>
+  <input type="text" id="text" name="number" placeholder="Kills: " required>
+  <input type="text" id="petname" name="petname" placeholder="Username: " required>
+  <input type="text" id="username" name="username" placeholder="Winning Amount" required>
+  <input type="submit" value="Submit" class="btn">
+</form>
+</div>
+<script>
+  document.querySelector('form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    fetch('https://script.google.com/macros/s/AKfycbxfpCowTBnF_7uqRsyaS9Td7jP8BwQKgS-yiQ0rBRD6P0ihOcFbdiXfDWlaRECD1aO_/exec', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert('Result Added Successfully!');
+    })
+    .catch(error => {
+      alert('Error submitting data!');
+    });
+  });
+</script>

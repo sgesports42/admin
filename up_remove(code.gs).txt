@@ -1,0 +1,25 @@
+function doPost(e) {
+    const data = JSON.parse(e.postData.contents);
+    const name = data.name;
+
+    const sheet = SpreadsheetApp.openById('17_snlLu-l2nid6xyu0r1z1hStLZpgP4-wpR7Dp4FkWI').getSheetByName('upcoming');
+    const rows = sheet.getDataRange().getValues();
+    let rowsToDelete = [];
+
+    for (let i = 0; i < rows.length; i++) {
+        if (rows[i][0] === name) {
+            rowsToDelete.push(i + 1);
+        }
+    }
+
+    if (rowsToDelete.length > 0) {
+        for (let i = rowsToDelete.length - 1; i >= 0; i--) {
+            sheet.deleteRow(rowsToDelete[i]);
+        }
+        return ContentService.createTextOutput(JSON.stringify({ result: 'deleted' }))
+                              .setMimeType(ContentService.MimeType.JSON);
+    } else {
+        return ContentService.createTextOutput(JSON.stringify({ result: 'not_found' }))
+                              .setMimeType(ContentService.MimeType.JSON);
+    }
+}

@@ -1,0 +1,19 @@
+function doPost(e) {
+    var ss = SpreadsheetApp.openById('YOUR_SHEET_ID');
+    var sheet = ss.getSheetByName('users');
+    var username = e.parameter.username;
+    var message = e.parameter.message;
+    var data = sheet.getDataRange().getValues();
+    var status = 'Not found';
+
+    for (var i = 0; i < data.length; i++) {
+        if (data[i][2] === username) {
+            sheet.getRange(i + 1, 9).setValue(message);
+            sheet.getRange(i + 1, 10).setValue(1);
+            status = 'Message saved successfully';
+            break;
+        }
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({status: status})).setMimeType(ContentService.MimeType.JSON);
+}
